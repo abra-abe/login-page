@@ -43,6 +43,25 @@ app.post('/login', passport.authenticate('local', {
     res.redirect('/dashboard')
 })
 
+// routes for register
+app.get('/register', (req, res) => {
+    res.render('register.ejs');
+})
+
+app.post('/register', (req, res) => {
+    var username = req.body.username
+    var pass = req.body.password
+    /*
+    The method below saves the password in the database as plain text
+    // const user = new User({ username: username, password: pass})
+    // user.save();
+    */
+   //This method saves the password as a hash
+    User.register({ username: username, active: false}, pass)
+    
+    res.redirect('/secret');
+})
+
 //dashboard route for logged in users
 app.get('/dashboard', connectEnsureLogin.ensureLoggedIn(), (req, res) => {
     res.send('Hello there, '+req.user.username+' Your session Id is: '+req.sessionID+
